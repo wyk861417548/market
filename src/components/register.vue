@@ -17,6 +17,9 @@
                 <el-form-item label="性别" prop="sex">
                     <el-input type="text" v-model="registerForm.sex"></el-input>
                 </el-form-item>
+                <el-form-item label="电话号码" prop="phone">
+                    <el-input type="text" v-model="registerForm.phone"></el-input>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="sign">去登录</el-button>
                     <el-button type="primary" @click="registeredForm('ruleForm')">注册
@@ -59,7 +62,8 @@
                     password: '',
                     checkpass: '',
                     age:'',
-                    sex:''
+                    sex:'',
+                    phone:''
 
                 },
                 //表单验证规则
@@ -84,6 +88,10 @@
                     sex: [
                         { required: true, message: '请输入密码', trigger: 'blur' },
                         { min: 1, max: 2, message: '长度在 1 到 2 个字符', trigger: 'blur' }
+                    ],
+                    phone:[
+                        { required: true, message: '请输入电话号码', trigger: 'blur' },
+                        { min: 11, max: 11, message: '长度在 11个字符', trigger: 'blur' }
                     ]
                 }
             }
@@ -98,7 +106,8 @@
                             username:this.registerForm.username,
                             password:this.registerForm.password,
                             age:this.registerForm.age,
-                            sex:this.registerForm.sex
+                            sex:this.registerForm.sex,
+                            phone:this.registerForm.phone
                         }).then(res=>{
                             if( res.data.errno){
                                 this.$message({

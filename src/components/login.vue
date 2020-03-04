@@ -19,7 +19,8 @@
 </template>
 
 <script>
-    import '../common/login.css'
+    import '../common/css/login.css'
+    import {setCookie} from "../common/js/cookie.js";
     export default {
         data(){
             return {
@@ -44,11 +45,11 @@
         methods: {
             //表单ref="ruleForm" @click="submitForm('ruleForm')传表单的ref然后引用表单的方法validate
             submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
+                this.$refs[formName].validate(async (valid) => {
                     //所有校验规则都成立才会成功
                     if (valid) {
                         //把用户信息提交给后台 axios已经放到vue的原型上去了可以this.$axios用
-                        this.$axios.post('http://localhost:7878/login',{
+                        await this.$axios.post('http://localhost:7878/login',{
                             username:this.loginForm.username,
                             password:this.loginForm.password
                         }).then(res=>{
@@ -65,14 +66,17 @@
                             this.$message({
                                 showClose: true,
                                 message: '登录成功',
-                                type: 'success'
+                                type: 'success',
+
                             });
-                            this.$router.push('/sell')
+                            setCookie('username',this.loginForm.username,60*60*24)
+                            this.$router.push('/home')
                         })
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
+
                 });
             },
             registered(){

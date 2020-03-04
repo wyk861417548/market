@@ -27,8 +27,16 @@ let userSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    limit:{
+    phone:{
         type:Number,
+        required:true
+    },
+    limit:{
+        type:Boolean,
+        required:true
+    },
+    role:{
+        type:String,
         required:true
     }
 })
