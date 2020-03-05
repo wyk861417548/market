@@ -22,22 +22,23 @@ app.all("*", function (req, res, next) { //解决跨域请求问题
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const {getUsers,setUsers,getUserList,updateUserLimit,setUserRole,setRoleList} = require('./user/getUsers.js')
-const {getMenulists,setMenulists} = require('./menulist/getMenulists.js')
+const {getUsers,setUsers,getUserList,updateUserLimit,setUserRole,setRoleList,getselfUser} = require('./user/getUsers.js')
+//const {getMenulists,setMenulists} = require('./menulist/getMenulists.js')
 const {getRole,setRole,getRoleList} = require('./role/getRole.js')
 
 app.post('/login',getUsers)  //登录
 app.post('/register',setUsers)  //注册
 app.post('/user',getUserList)   //用户列表
 app.post('/user/limit',updateUserLimit)  //更改用户状态
-app.get('/menus',getMenulists)   //左侧菜单
+//app.get('/menus',getMenulists)   //左侧菜单
+app.post('/selfuser',getselfUser)  //获取用户自身的账号
 app.post('/role',getRole)   //获取角色
 app.post('/addrole',setRole)   //添加角色
 app.post('/home/role',getRoleList)   //根据角色返回左侧权限列表
 app.post('/user/:id',setUserRole)   //为用户分配角色
 app.post('/home/:id',setRoleList)   //不同用户返回不同功能
 
-app.get('/aa',setMenulists)
+//app.get('/aa',setMenulists)
 app.listen(7878,()=>{
     console.log("端口监听成功")
 });

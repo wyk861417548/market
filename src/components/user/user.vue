@@ -148,8 +148,8 @@
                 if( !this.selectRoleId ){
                     return this.$message.error("请选择要分配的角色")
                 }
-                this.$axios.post(`http://localhost:7878/user/${this.selectRoleId}`,{params:this.userInfo.username}).then(data=>{
-                    console.log("dawdw",data);
+                this.$axios.post(`http://localhost:7878/user/${this.selectRoleId}`,{params:this.userInfo.username}).then(()=>{
+                    this.$message("角色分配成功");
                     //console.log("bbb",this.userlist)
                 })
                 this.userInfo.role = this.selectRoleId ;

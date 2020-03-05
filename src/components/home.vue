@@ -13,11 +13,11 @@
             <el-aside :width="isCollapse?'64px':'200px'">
                 <div class="toggle-button" @click="toggleCollapse">|||</div>
                 <el-menu background-color="#333744" text-color="#fff"
-                         active-text-color="#ffd04b" unique-opened
+                         active-text-color="#409eff" unique-opened
                          :collapse="isCollapse" :collapse-transition="false" router>
                     <el-submenu :index="item.id" v-for="item in menulist" :key="item.id">
                         <template slot="title">
-                            <i class="el-icon-location"></i>
+                            <i :class="iconsObj[item.id]"></i>
                             <span>{{item.authName}}</span>
                         </template>
                         <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem._id">
@@ -43,6 +43,13 @@
     export default {
         data() {
             return {
+                iconsObj:{
+                    "101":"el-icon-user",
+                    "201":"el-icon-lock",
+                    "301":"el-icon-shopping-cart-2",
+                    "401":"el-icon-shopping-cart-full",
+                    "501":"el-icon-box",
+                },//图标
                 menulist:[],
                 isCollapse:false,
                 user:'',

@@ -105,6 +105,18 @@ module.exports = {
             //console.log(data)
             res.send(data[0])
         })
+    },
+    //查询用户自身的账号
+    getselfUser:function (req,res) {
+        Users.find({username:req.body.params},{           //查询条件与返回内容选项
+            __v:false,
+            _id:false,
+            password:false,
+            role:false
+        }).then(data=>{
+            res.send(data)
+            console.log(data)
+        })
     }
 }
 
