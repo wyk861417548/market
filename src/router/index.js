@@ -5,15 +5,14 @@ import home from '../components/home.vue'
 import register  from '../components/register.vue'
 import welcome  from '../components/welcome.vue'
 import user from '../components/user/user.vue'
-import selfuser from '../components/selfuser/selfuser.vue'
-import power from '../components/power/power.vue'
+import selfuser from '../components/user/selfuser.vue'
+import power from '../components/role/power.vue'
 import role from '../components/role/role.vue'
 import sell from '../components/sell/sell.vue'
-import sellod from '../components/sellod/sellod.vue'
+import sellod from '../components/sell/sellod.vue'
 import purchase from '../components/purchase/purchase.vue'
-import purchaseod from '../components/purchaseod/purchaseod.vue'
+import purchaseod from '../components/purchase/purchaseod.vue'
 import stock from  '../components/stock/stock.vue'
-import stockod from '../components/stockod/stockod.vue'
 import aa from '../components/aa.vue'
 import {getCookie} from "../common/js/cookie.js";
 
@@ -63,9 +62,6 @@ const router =  new VueRouter({
             },{
                 path:'/stock',
                 component: stock
-            },{
-                path:'/stockod',
-                component: stockod
             }]
         },
         {
@@ -84,7 +80,6 @@ router.beforeEach((to,path,next)=>{
     if(to.path === '/login') return next();
     if(to.path === '/register') return next();
     if(!uname)return next('/login');
-
     next()
 
 })

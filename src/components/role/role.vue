@@ -9,12 +9,14 @@
 
         <!--角色列表内容-->
         <el-card>
-            <el-button type="primary" @click="setRoleList">添加角色</el-button>
-            <el-table border :data="roleList">
+            <!--<el-button type="primary" @click="setRoleList">添加角色</el-button>-->
+            <el-table  border size="mini" :data="roleList" >
                 <!--展开列-->
                 <el-table-column type="expand" >
                     <template slot-scope="scope">
-                        <el-row :class="['bdbottom','ali-center',index ===0?'bdtop':'']" v-for="(item1,index) in scope.row.children"  :key="item1.id">
+                        <el-row :class="['bdbottom','ali-center',
+                        index ===0?'bdtop':'']"
+                        v-for="(item1,index) in scope.row.children"  :key="item1.id">
                             <!--渲染一级权限-->
                             <el-col :span='5'>
                                 <el-tag>{{item1.authName}}</el-tag>
@@ -43,13 +45,13 @@
                 <el-table-column type="index" ></el-table-column>
                 <el-table-column label="角色名称" prop="roleName"></el-table-column>
                 <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
-                <el-table-column label="操作" width="180px">
-                    <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+                <el-table-column label="操作" >
                     <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
                     <el-tooltip effect="dark" content="分配角色" placement="top" >
                         <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
                     </el-tooltip>
                 </el-table-column>
+
             </el-table>
         </el-card>
     </div>
@@ -90,9 +92,7 @@
 .el-breadcrumb{
     margin-bottom: 15px;
 }
-.el-button{
-    margin-bottom: 15px;
-}
+
 .bdtop{
     border-top:1px solid #eee
 }

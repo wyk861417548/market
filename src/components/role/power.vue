@@ -8,7 +8,7 @@
         </el-breadcrumb>
         <!--权限列表内容-->
         <el-card>
-            <el-table border :data="limitList">
+            <el-table border size="mini" :data="limitList">
             <el-table-column type="index" ></el-table-column>
             <el-table-column label="权限名称" prop="authName"></el-table-column>
             <el-table-column label="路径" prop="path"></el-table-column>

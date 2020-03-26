@@ -119,9 +119,9 @@ module.exports = {
     },
     //获取登录用户对应角色的权限
     getRoleList:function (req,res) {
-        console.log(req.body.params.role)
+        //console.log(req.body.params.role)
         Role.find({roleName:req.body.params.role}).then(data=>{
-            console.log(data)
+            //console.log(data)
             res.send(data)
         })
     },

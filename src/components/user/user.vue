@@ -11,7 +11,7 @@
             <el-row :gutter="20">
                 <el-col :span="7">
                     <el-input placeholder="请输入内容" v-model="queryInfo.query">
-                        <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
+                        <el-button class="select" slot="append" icon="el-icon-search" @click="getUserList"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="6">
@@ -19,7 +19,7 @@
                 </el-col>
             </el-row>
             <!--用户列表内容-->
-            <el-table border :data="userlist">
+            <el-table size="mini" border :data="userlist" max-height="380">
                 <el-table-column type="index" ></el-table-column>
                 <el-table-column label="用户名" prop="username"></el-table-column>
                 <el-table-column label="年龄" prop="age"></el-table-column>
@@ -34,7 +34,6 @@
                 </el-table-column>
                 <el-table-column label="操作" width="180px">
                     <template slot-scope="scope">
-                        <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
                         <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
                         <el-tooltip effect="dark" content="分配角色" placement="top" >
                             <el-button type="warning" icon="el-icon-setting" size="mini" @click="setRole(scope.row)"></el-button>
@@ -47,7 +46,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="queryInfo.pagenum"
-                    :page-sizes="[5, 10, 15, 20]"
+                    :page-sizes="[6, 10, 15, 20]"
                     :page-size="queryInfo.pagesize"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="total">
@@ -92,7 +91,7 @@
                 queryInfo:{  //搜索字
                     query:'',
                     pagenum:1,  //当前页
-                    pagesize:5  //当前每页显示多少条数据
+                    pagesize:6  //当前每页显示多少条数据
                 },
                 userlist:[],  //用户列表
                 total:0,      //总用户数
@@ -108,9 +107,10 @@
         },
         methods:{
             //获取所有用户
-            getUserList(){
+            getUserList() {
                 this.$axios.post('http://localhost:7878/user',{params:this.queryInfo}).then(data=>{
                     //console.log("bbb",data)
+
                     this.userlist = data.data[0]
                     this.total = data.data[1]
                     // console.log("aaa",this.userlist)
@@ -169,5 +169,16 @@
 }
 .el-table{
     margin-top: 15px;
+}
+.el-pagination{
+    margin-top: 15px;
+}
+.el-input{
+    width: 150px;
+}
+.select{
+    margin: 0;
+    padding: 0 0 0 12px;
+    height: 40px;
 }
 </style>

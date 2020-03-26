@@ -10,8 +10,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                    <el-button type="primary" @click="registered">免费注册
-                    </el-button>
+                    <div @click="registered">没有账号，免费注册</div>
                 </el-form-item>
             </el-form>
         </div>
@@ -26,7 +25,7 @@
             return {
                 loginForm: {
                     username:'',
-                    password: '',
+                    password:'',
                 },
                 //表单验证规则
                 rules: {
@@ -53,24 +52,40 @@
                             username:this.loginForm.username,
                             password:this.loginForm.password
                         }).then(res=>{
-                            console.log(res.data.errno) //后端返回来的数据 0或 1
-                            if( res.data.errno){
-                                this.$message({
+                            console.log(res.data.errno) //后端返回来的数据 0,1,2,3
+                            switch (res.data.errno) {
+                                case 0:
+                                    this.$message({
                                     showClose: true,
-                                    message: '用户名或密码错误',
-                                    type: 'error'
+                                    message: '登录成功',
+                                    type: 'success',
                                 });
-                                //alert("登录失败")
-                                return;
-                            }
-                            this.$message({
-                                showClose: true,
-                                message: '登录成功',
-                                type: 'success',
+                                    setCookie('username',this.loginForm.username,60*60*24)
+                                    this.$router.push('/home');
+                                    break;
+                                case 1:
+                                    this.$message({
+                                        showClose: true,
+                                        message: '用户不存在',
+                                        type: 'error'
+                                    });
+                                    break;
+                                case 2:
+                                    this.$message({
+                                        showClose: true,
+                                        message: '账户未被允许登录',
+                                        type: 'error',
+                                    });
+                                    break;
+                                case 3:
+                                    this.$message({
+                                        showClose: true,
+                                        message: '密码错误',
+                                        type: 'error',
+                                    });
+                                    break;
 
-                            });
-                            setCookie('username',this.loginForm.username,60*60*24)
-                            this.$router.push('/home')
+                            }
                         })
                     } else {
                         console.log('error submit!!');
@@ -108,6 +123,9 @@
     bottom: 50px;
     left: 50px;
 
+}
+el-button{
+    width:100%;
 }
 /*.login_box{*/
     /*width: 450px;*/

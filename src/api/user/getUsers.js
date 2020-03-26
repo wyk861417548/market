@@ -9,17 +9,29 @@ module.exports = {
         // options: 查询配置选项
         // callback: 回调函数 或是使用promise, 会返回err或是data
         //如果找到用户返回0 否则返回1
-        Users.findOne({username,password}).then(user=>{
-            if( user ){
-                res.send({errno:0})
-            }else {
-                res.send({errno:1})
+        Users.findOne({username}).then(user=>{
+            console.log('当前的用户验证',user)
+            if( user == null ){
+                res.send({errno:1})   //用户不存在
+                return;
             }
+            Users.findOne({username,password}).then(data=>{
+                if( data == null ){
+                    res.send({errno:3})    //密码错误
+                    return;
+                }
+                if( data.limit == true ){
+                    res.send({errno:0})
+                } else {
+                    res.send({errno:2})     //用户不被允许登录
+                }
+            })
+
         })
     },
     //注册验证
     setUsers:function (req,res){
-        console.log(req.body)
+        //console.log(req.body)
         let {username,password,age,sex,phone} = req.body;
 
         Users.findOne({username}).then(user=>{
@@ -35,8 +47,7 @@ module.exports = {
                 sex,
                 phone,
                 limit:false,
-                role:'一般用户',
-                id:1
+                role:'普通用户',
 
             })
 
@@ -45,8 +56,8 @@ module.exports = {
     //获取所有用户（分页）
     getUserList:function (req,res) {
         let {query,pagenum,pagesize} = req.body.params;
-        console.log("数据",req.body.params)
-        console.log("查询条件",query)
+        //console.log("数据",req.body.params)
+        //console.log("查询条件",query)
         if( query ==='' ){
             // Users.find({},{           //查询条件与返回内容选项
             //     __v:false,
@@ -68,24 +79,40 @@ module.exports = {
                     skip:(pagenum-1)*pagesize,
                     limit:Number(pagesize)
                 }),
-                Users.countDocuments()
-            ]).then(data=>{console.log(data[0],data[1]),res.send(data)})
+                Users.countDocuments(),
+                //console.log(Users.countDocuments())
+            ]).then(data=>{res.send(data)})
         }else {
-            Users.find({username:query},{           //查询条件与返回内容选项
-                __v:false,
-                _id:false,
-                password:false
-            }).then(data=>{
+            Promise.all([
+                Users.find({
+                    username:{$regex:query}
+                },{           //查询条件与返回内容选项
+                    __v:false,
+                    _id:false,
+                    password:false
+                },{
+                    skip:(pagenum-1)*pagesize,
+                    limit:Number(pagesize)
+                }),
+                Users.find({
+                    username:{$regex:query}
+                },{           //查询条件与返回内容选项
+                    __v:false,
+                    _id:false,
+                    password:false
+                }).countDocuments(true)
+            ]).then(data=>{
                 res.send(data)
+                console.log("aaaaaa",data)
             })
         }
     },
     //更改用户状态
     updateUserLimit:function (req,res) {
-        console.log(req.body)
+        //console.log(req.body)
         Users.updateOne({username:req.body.username},{$set:{limit:req.body.limit}}).then(data=>{
             // res.send(data)
-            console.log(data)
+            //console.log(data)
             console.log('更新成功')
         }).catch(err=>{
             if( err ){throw err}
@@ -93,7 +120,7 @@ module.exports = {
     },
     //为用户分配角色
     setUserRole:function (req,res) {
-        console.log("传过来的",req.params.id,req.body.params)
+        //console.log("传过来的",req.params.id,req.body.params)
         Users.updateOne({username:req.body.params},{$set:{role:req.params.id}}).then(()=>{
             console.log("为用户分配角色成功！！")
         })
@@ -101,7 +128,15 @@ module.exports = {
     //在登陆之后根据用户将其角色返回home页面
     setRoleList:function (req,res) {
         //console.log(req.params.id)
-        Users.find({username:req.params.id}).then(data=>{
+        Users.find({username:req.params.id},{
+            __v:false,
+            password:false,
+            age:false,
+            phone:false,
+            limit:false,
+            phone:false,
+            sex:false
+        }).then(data=>{
             //console.log(data)
             res.send(data[0])
         })
@@ -111,10 +146,25 @@ module.exports = {
         Users.find({username:req.body.params},{           //查询条件与返回内容选项
             __v:false,
             _id:false,
-            password:false,
-            role:false
+            password:false
         }).then(data=>{
             res.send(data)
+            console.log(data)
+        })
+    },
+    //修改自身账号
+    updateSelf:function (req,res) {
+        //console.log("wwwwwwwwwwwww",req.body.params)
+        const {username,age,sex,phone} = req.body.params
+        Users.update({
+            username:username
+        },{
+            $set:{
+                age:age,
+                sex:sex,
+                phone:phone
+            }
+        }).then(data=>{
             console.log(data)
         })
     }

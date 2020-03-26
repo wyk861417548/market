@@ -1,5 +1,5 @@
 <template>
-    <div>Welcome</div>
+    <div>丰民超市欢迎您！</div>
 </template>
 
 <script>
